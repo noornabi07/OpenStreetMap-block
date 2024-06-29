@@ -96,6 +96,12 @@ $primaryColor: #4527a4;
 	color: #fff;
 }
 
+.leaflet-control-layers {
+  background-color: #33B2AA;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
 .prefixInspectorInfo {
   padding: 6px;
 
