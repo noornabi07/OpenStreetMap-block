@@ -6,6 +6,9 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import L from 'leaflet';
+import 'leaflet.locatecontrol';
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
+
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import MainStyle from '../MainStyle/MainStyle';
@@ -37,6 +40,28 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
     setMapPosition([attributes.settingsLat || 51.505, attributes.settingsLng || -0.09]);
   }, [attributes.settingsLat, attributes.settingsLng, isMouseZoom]);
 
+  const GeolocationControl = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const locateControl = L.control.locate({
+        position: 'topright',
+        strings: {
+          title: "Show me where I am now"
+        },
+        locateOptions: {
+          enableHighAccuracy: true
+        }
+      }).addTo(map);
+
+      return () => {
+        map.removeControl(locateControl);
+      };
+    }, [map]);
+
+    return null;
+  };
+
   return (
     <Fragment>
 
@@ -55,8 +80,9 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
         <MapContainer className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.bPlugins.com">OpenStreetMap</a> contributors'
+            attribution='&copy; <a href="https://www.bPlugins.com">bPlugins</a> contributors'
           />
+          <GeolocationControl />
           <OSMMap position={mapPosition} />
           <Marker position={mapPosition}>
             <Popup>
