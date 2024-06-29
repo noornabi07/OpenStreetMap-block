@@ -1,4 +1,4 @@
-import { PanelBody, __experimentalNumberControl as NumberControl, RangeControl, TextControl, Button, ToggleControl, SelectControl } from '@wordpress/components';
+import { PanelBody, RangeControl, TextControl, ToggleControl, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import React, { useState } from 'react';
 import Autosuggest from 'react-autosuggest';

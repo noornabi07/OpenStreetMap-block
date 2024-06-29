@@ -31,7 +31,7 @@ module.exports = {
 	'rules': {
 		'func-names': 'off',
 		"object-shorthand": 'off',
-		'no-console': 'warn',
+		'no-console': 'off',
 		'no-unused-vars': 'warn',
 		'react/jsx-filename-extension': [
 			1, { 'extensions': ['.js', '.jsx'] }
@@ -41,7 +41,7 @@ module.exports = {
 		"react/display-name": "off",
 		'no-process-exit': 'off',
 		'no-unsafe-optional-chaining': 'off',
-		'object-shorthand': 'warn',
+		'object-shorthand': 'off',
 		'class-methods-use-this': 'off',
 	}
 };

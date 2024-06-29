@@ -10,11 +10,32 @@ html {
 	font-family: dashicons !important;
 }
 
+// LayourControl style header
+.leaflet-control-layers {
+  background-color: #33B2AA;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.leaflet-control-layers .leaflet-control-layers-list {
+  padding: 10px;
+}
+
+.leaflet-control-layers label {
+  font-size: 14px;
+  color: #fff;
+}
+
+.leaflet-control-layers input {
+  margin-right: 8px;
+}
+
 // Block Name
-.wp-block-prefix-block-name {
+.wp-block-osm-osm-block {
 	* {
 		box-sizing: border-box;
 	}
+	// background-color: #33B2AA;
 
 	.prefixBlockName {
 		display: inline-block;

@@ -5,8 +5,6 @@ const MainStyle = ({ attributes }) => {
   const { cId, border, columnWidth, columnHeight, wrapperBorder, wrapperStyle, typography } = attributes;
   const { padding, background, titleColor } = wrapperStyle;
 
-  console.log(padding);
-
   const mainWrapper = `#wrapper-${cId}`;
   const mapContent = `${mainWrapper} .mapContent`;
   const mainMap = `${mainWrapper} .mainMap`;

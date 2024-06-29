@@ -83,7 +83,7 @@
       "type": "object",
       "default": {
         "padding": 20,
-        "background": "",
+        "background": "#2FB0A7",
         "titleColor": "#fff"
       }
     }

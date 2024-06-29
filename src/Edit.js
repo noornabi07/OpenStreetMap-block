@@ -1,10 +1,8 @@
-import { useEffect, Fragment, useState } from 'react';
+import { useEffect, Fragment } from 'react';
 import { InspectorControls } from '@wordpress/block-editor';
 import { TabPanel } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
 import ContentSetting from './components/Settings/ContentSetting/ContentSetting';
 import { useMap } from 'react-leaflet';
-// import StyleSetting from './components/Settings/StyleSetting/StyleSetting';
 import OsmBackend from './components/OsmBack/OsmBackend';
 import Style from './components/Settings/StyleSetting/Style';
 const Edit = props => {

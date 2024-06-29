@@ -70,7 +70,7 @@ const Style = ({ attributes, setAttributes }) => {
             draft.background = val;
           })
           setAttributes({ wrapperStyle: newBackground });
-        }} defaults={{ color: '#2BADA5' }} />
+        }} defaults={{ color: '#2FB0A7' }} />
       </PanelBody>
     </div>
   );

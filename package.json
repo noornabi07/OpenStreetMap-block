@@ -18,15 +18,18 @@
   "author": "Wasek Billah",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "bpl-gutenberg-panel": "^0.0.42",
     "immer": "^10.1.1",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
+    "leaflet-routing-machine": "^3.2.12",
     "leaflet.locatecontrol": "^0.81.1",
     "osm": "^1.0.0",
     "react-autosuggest": "^10.1.0",
     "react-icons": "^4.12.0",
     "react-leaflet": "^4.2.1",
+    "reactstrap": "^9.2.2",
     "util": "^0.12.5"
   },
   "devDependencies": {
