@@ -1,0 +1,106 @@
+{
+  "apiVersion": "1",
+  "name": "osm/osm-block",
+  "title": "OSM Block",
+  "description": "Insert a custom map featuring your own locations or an interactive map where anyone can add location pins without registering by Noornabi.",
+  "category": "widgets",
+  "keywords": ["osm-block", "openStreetMap", "Map-block"],
+  "textdomain": "osm-block",
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": ""
+    },
+    "cId": {
+      "type": "string",
+      "default": ""
+    },
+    "content": {
+      "type": "string",
+      "default": "Open Street Map"
+    },
+    "headingTag": {
+      "type": "string",
+      "default": "h2"
+    },
+    "typography": {
+      "type": "object",
+      "default": {
+        "fontSize": 25
+      }
+    },
+    "tab": {
+      "type": "string",
+      "default": {
+        "activeTab": "tab1"
+      }
+    },
+    "settingsSearchQuery": {
+      "type": "string",
+      "default": ""
+    },
+    "settingsLat": {
+      "type": "string",
+      "default": "51.505"
+    },
+    "settingsLng": {
+      "type": "string",
+      "default": "-0.09"
+    },
+    "isMouseZoom": {
+      "type": "boolean",
+      "default": true
+    },
+    "zoomUnit": {
+      "type": "number",
+      "default": 13
+    },
+    "columnWidth": {
+      "type": "object",
+      "default": {
+        "width": { "desktop": "100%", "tablet": "", "mobile": "" }
+      }
+    },
+    "columnHeight": {
+      "type": "object",
+      "default": {
+        "height": { "desktop": "400px", "tablet": "", "mobile": "" }
+      }
+    },
+    "border": {
+      "type": "object",
+      "default": {
+        "radius": "5px"
+      }
+    },
+    "wrapperBorder": {
+      "type": "object",
+      "default": {
+        "radius": "5px"
+      }
+    },
+    "wrapperStyle": {
+      "type": "object",
+      "default": {
+        "padding": 20,
+        "background": "",
+        "titleColor": "#fff"
+      }
+    }
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "html": false
+  },
+  "example": {
+    "attributes": {
+      "preview": true,
+      "columns": {
+        "desktop": 1,
+        "tablet": 1,
+        "mobile": 1
+      }
+    }
+  },
+  "editorScript": "file:./../dist/editor.js"
+}
