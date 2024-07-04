@@ -6,12 +6,12 @@ import { MediaUpload } from "@wordpress/block-editor";
 import { produce } from 'immer';
 
 const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
-  const { zoomUnit, isMouseZoom, marker, layer, tracker, mapOptions } = attributes;
+  const { marker, layer, tracker, mapOptions } = attributes;
 
   const { width, height, text, showIcon } = marker;
   const { position } = layer;
   const { tEnable, tPosition, tTitle } = tracker;
-  const { isShowDownload, isPdf, routePlan } = mapOptions;
+  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
 
   const [searchQuerySetting, setSearchQuerySetting] = useState(attributes.settingsSearchQuery || '');
   const [latSetting, setLatSetting] = useState(attributes.settingsLat || '');
@@ -154,18 +154,41 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
           />
         </div>
 
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
+          <label>Full Screen:</label>
+          <ToggleControl
+            checked={fullScreen}
+            onChange={val => {
+              const showFullScreen = produce(mapOptions, draft => {
+                draft.fullScreen = val;
+              })
+              setAttributes({ mapOptions: showFullScreen });
+            }}
+          />
+        </div>
+
         <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "10px", marginBottom: "10px" }}>
           <label>Mouse Zoom:</label>
           <ToggleControl
             checked={isMouseZoom}
-            onChange={(val) => setAttributes({ isMouseZoom: val })}
+            onChange={(val) => {
+              const newZoom = produce(mapOptions, draft => {
+                draft.isMouseZoom = val;
+              })
+              setAttributes({ mapOptions: newZoom });
+            }}
           />
         </div>
 
         <RangeControl
           label="Zoom Label"
           value={zoomUnit}
-          onChange={(value) => setAttributes({ zoomUnit: value })}
+          onChange={(value) => {
+            const newZoom = produce(mapOptions, draft => {
+              draft.zoomUnit = value;
+            })
+            setAttributes({ mapOptions: newZoom });
+          }}
           min={13}
           max={80}
         />

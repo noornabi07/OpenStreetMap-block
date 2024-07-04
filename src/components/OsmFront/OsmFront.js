@@ -8,6 +8,8 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet.locatecontrol';
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-fullscreen';
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { LayersControl, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import MainStyle from '../MainStyle/MainStyle';
@@ -20,7 +22,7 @@ const { BaseLayer } = LayersControl;
 const OsmFront = ({ attributes, setAttributes }) => {
   const [mapPosition, setMapPosition] = useState([attributes.settingsLat || 25.6260712, attributes.settingsLng || 88.6346228]);
 
-  const { cId, zoomUnit, isMouseZoom, marker, showIcon, layer, tracker, locations, mapOptions } = attributes;
+  const { cId, marker, showIcon, layer, tracker, locations, mapOptions } = attributes;
   const { fromLocation, toLocation } = locations;
   const { url } = marker;
   const mapInstance = useRef(null);
@@ -29,7 +31,7 @@ const OsmFront = ({ attributes, setAttributes }) => {
   const { text } = marker;
   const { position } = layer;
   const { tPosition, tTitle, tEnable } = tracker;
-  const { isShowDownload, isPdf, routePlan } = mapOptions;
+  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
 
   const createIcon = L.icon({
     iconUrl: url,
@@ -210,6 +212,38 @@ const OsmFront = ({ attributes, setAttributes }) => {
       });
   };
 
+  const FullscreenControl = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      if (!map) return;
+      const fullscreenControl = L.control.fullscreen({
+        position: 'topleft',
+        title: 'View Fullscreen',
+        titleCancel: 'Exit Fullscreen',
+      }).addTo(map);
+
+      // Change the icon using CSS
+      const fullscreenButton = document.querySelector('.leaflet-control-fullscreen-button');
+      if (fullscreenButton) {
+        fullscreenButton.style.backgroundImage = 'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
+        fullscreenButton.style.backgroundSize = 'cover';
+      }
+
+      map.on('fullscreenchange', () => {
+        if (map.isFullscreen()) {
+          fullscreenButton.style.backgroundImage = 'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
+        } else {
+          fullscreenButton.style.backgroundImage = 'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
+        }
+      });
+
+      return () => map.removeControl(fullscreenControl);
+    }, [map]);
+
+    return null;
+  };
+
   const OSMMap = ({ position }) => {
     const map = useMap();
 
@@ -224,39 +258,51 @@ const OsmFront = ({ attributes, setAttributes }) => {
 
   return (
     <Fragment>
-      <MainStyle attributes={attributes} />
-      <div id={`wrapper-${cId}`}>
 
-        <MapContainer className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
-          <LayersControl position={position}>
-            <BaseLayer checked name="OpenStreetMap">
-              <TileLayer
-                url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-            </BaseLayer>
-            <BaseLayer name="Satellite">
-              <TileLayer
-                url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors'
-              />
-            </BaseLayer>
-          </LayersControl>
-          {tEnable && <GeolocationControl />}
-          <OSMMap position={mapPosition} />
-          {isShowDownload && <PrintControl />}
-          {routePlan && <RoutingControl />}
-          {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
-            <Popup className='popupStyle'>
-              {text}
-            </Popup>
-            <Tooltip>Your Find Location</Tooltip>
-          </Marker>}
-        </MapContainer>
-        {isPdf && <button onClick={exportAsPdf}>
-          Export as PDF
-        </button>}
-      </div>
+      <MainStyle attributes={attributes} />
+
+      <MapContainer className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
+        <LayersControl position={position}>
+          <BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </BaseLayer>
+          <BaseLayer name="Satellite">
+            <TileLayer
+              url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+              attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors'
+            />
+          </BaseLayer>
+          <BaseLayer name="CartoDB Positron">
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+            />
+          </BaseLayer>
+          <BaseLayer name="CartoDB Dark Matter">
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+            />
+          </BaseLayer>
+        </LayersControl>
+        {tEnable && <GeolocationControl />}
+        <OSMMap position={mapPosition} />
+        {fullScreen && <FullscreenControl />}
+        {isShowDownload && <PrintControl />}
+        {routePlan && <RoutingControl />}
+        {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
+          <Popup className='popupStyle'>
+            {text}
+          </Popup>
+          <Tooltip>Your Find Location</Tooltip>
+        </Marker>}
+      </MapContainer>
+      {isPdf && <button onClick={exportAsPdf}>
+        Export as PDF
+      </button>}
     </Fragment>
   );
 };

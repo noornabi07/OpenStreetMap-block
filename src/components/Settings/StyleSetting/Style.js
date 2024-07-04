@@ -8,9 +8,10 @@ import { produce } from 'immer';
 
 const Style = ({ attributes, setAttributes }) => {
   const [device, setDevice] = useState('desktop');
-  const { columnWidth, columnHeight, border, wrapperBorder, wrapperStyle, marker} = attributes;
-  const { padding } = wrapperStyle;
+  const { columnWidth, columnHeight, wrapperStyles, marker, mapStyles } = attributes;
   const { color, typo, closeBtnColor, background, mWidth, mHeight } = marker;
+  const { mapBorder } = mapStyles;
+  const { padding, wrapperBorder  } = wrapperStyles;
 
   return (
     <div>
@@ -32,23 +33,33 @@ const Style = ({ attributes, setAttributes }) => {
           <UnitControl value={columnHeight.height[device]} onChange={newHeight => setAttributes({ columnHeight: updateData(columnHeight, newHeight, "height", device) })} beforeIcon='grid-view' ></UnitControl>
         </div>
 
-        <BorderControl label={__('Map Border:', 'osm-block')} value={border} onChange={val => setAttributes({ border: val })} defaults={{ radius: '0px' }} />
+        <BorderControl label={__('Map Border:', 'osm-block')} value={mapBorder} onChange={val => {
+          const newMapBorder = produce(mapStyles, draft => {
+            draft.mapBorder = val;
+          })
+          setAttributes({ mapStyles: newMapBorder });
+        }} defaults={{ radius: '0px' }} />
       </PanelBody>
 
       <PanelBody title={__("Wrapper Styles", "osm-block")} initialOpen={false}>
 
         <div style={{ marginBottom: "10px" }}>
-          <BorderControl label={__('Border Map Wrapper:', 'osm-block')} value={wrapperBorder} onChange={val => setAttributes({ wrapperBorder: val })} defaults={{ radius: '5px' }} />
+          <BorderControl label={__('Wrapper Border:', 'osm-block')} value={wrapperBorder} onChange={val => {
+            const newWrapperBorder = produce(wrapperStyles, draft => {
+              draft.wrapperBorder = val;
+            })
+            setAttributes({ wrapperStyles: newWrapperBorder });
+          }} defaults={{ radius: '5px' }} />
         </div>
 
         <RangeControl
           label="Padding Map Wrapper"
           value={padding}
           onChange={(value) => {
-            const newPadding = produce(wrapperStyle, draft => {
+            const newPadding = produce(wrapperStyles, draft => {
               draft.padding = value;
             })
-            setAttributes({ wrapperStyle: newPadding });
+            setAttributes({ wrapperStyles: newPadding });
           }}
           min={10}
           max={80}

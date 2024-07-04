@@ -8,13 +8,12 @@ import Style from './components/Settings/StyleSetting/Style';
 const Edit = props => {
 	const { className, setAttributes, clientId, attributes } = props;
 
-	const { tab, isMouseZoom, zoomUnit, mapOptions } = attributes;
-	const { routePlan } = mapOptions;
+	const { tab, mapOptions,cId } = attributes;
+	const { routePlan, isMouseZoom, zoomUnit } = mapOptions;
 
 	useEffect(() => {
 		clientId && setAttributes({ cId: clientId.substring(0, 10) });
 	}, [clientId, zoomUnit, isMouseZoom]); // Set & Update clientId to cId
-
 	const setPosition = (lat, lng) => {
 		setAttributes({ settingsLat: lat, settingsLng: lng });
 	};
@@ -69,8 +68,10 @@ const Edit = props => {
 
 				</TabPanel>
 			</InspectorControls>
-
+			<div id={`wrapper-${cId}`}>
 			<OsmBackend attributes={attributes} OSMMap={OSMMap} setAttributes={setAttributes} setPosition={setPosition}></OsmBackend>
+			</div>
+
 		</Fragment>
 	</div>;
 };

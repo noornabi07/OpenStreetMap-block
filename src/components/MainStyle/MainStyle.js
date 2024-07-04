@@ -2,10 +2,10 @@ import React from 'react';
 import { getBorderCSS, getTypoCSS } from '../../../../Components/utils/getCSS'
 
 const MainStyle = ({ attributes }) => {
-  const { cId, border, columnWidth, columnHeight, wrapperBorder, wrapperStyle, typography, marker, tracker } = attributes;
-  const { padding, titleColor } = wrapperStyle;
+  const { cId, columnWidth, columnHeight, wrapperStyles, typography, marker, mapStyles } = attributes;
   const { color, typo, closeBtnColor, background, mWidth, mHeight } = marker;
-  const { tBackground } = tracker;
+  const { padding, wrapperBorder } = wrapperStyles;
+  const { mapBorder } = mapStyles;
 
   const mainWrapper = `#wrapper-${cId}`;
   const mapContent = `${mainWrapper} .mapContent`;
@@ -21,6 +21,10 @@ const MainStyle = ({ attributes }) => {
   return (
     <style>
       {`
+      ${mainWrapper}{
+          padding: ${padding}px;
+          ${getBorderCSS(wrapperBorder)};
+        }
       ${markerCloseButton}{
         color: ${closeBtnColor};
       }
@@ -36,22 +40,13 @@ const MainStyle = ({ attributes }) => {
           color: ${color};
         }
         ${getTypoCSS(`${markerTitle}`, typo)?.styles}
-        ${mainWrapper}{
-          ${getBorderCSS(wrapperBorder)};
-          padding: ${padding}px;
-        }
-        ${title}{
-          color: ${titleColor};
-        }
         ${getTypoCSS(`${title}`, typography)?.styles}
-
         ${mainMap}{
-          ${getBorderCSS(border)};
+          ${getBorderCSS(mapBorder)};
           width: ${columnWidth.width.desktop};
           height: ${columnHeight.height.desktop};
           box-sizing: border-box;
         }
-
         @media only screen and (min-width:641px) and (max-width: 1024px){
           ${mainMap}{
             width: ${columnWidth.width.tablet};

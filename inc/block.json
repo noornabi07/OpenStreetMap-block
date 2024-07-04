@@ -19,12 +19,6 @@
       "type": "string",
       "default": "Open Street Map"
     },
-    "typography": {
-      "type": "object",
-      "default": {
-        "fontSize": 25
-      }
-    },
     "tab": {
       "type": "string",
       "default": {
@@ -43,14 +37,6 @@
       "type": "string",
       "default": "88.6346228"
     },
-    "isMouseZoom": {
-      "type": "boolean",
-      "default": true
-    },
-    "zoomUnit": {
-      "type": "number",
-      "default": 15
-    },
     "columnWidth": {
       "type": "object",
       "default": {
@@ -63,23 +49,17 @@
         "height": { "desktop": "400px", "tablet": "", "mobile": "" }
       }
     },
-    "border": {
-      "type": "object",
-      "default": {
-        "radius": "5px"
-      }
-    },
-    "wrapperBorder": {
-      "type": "object",
-      "default": {
-        "radius": "5px"
-      }
-    },
-    "wrapperStyle": {
+    "wrapperStyles": {
       "type": "object",
       "default": {
         "padding": 20,
-        "titleColor": "#fff"
+        "wrapperBorder": {"radius": "5px"}
+      }
+    },
+    "mapStyles": {
+      "type": "object",
+      "default": {
+        "mapBorder": { "radius": "5px" }
       }
     },
     "marker": {
@@ -119,9 +99,12 @@
     "mapOptions": {
       "type": "object",
       "default": {
-        "isShowDownload": true,
-        "isPdf": true,
-        "routePlan": false
+        "isShowDownload": false,
+        "isPdf": false,
+        "routePlan": false,
+        "fullScreen": false,
+        "zoomUnit": 15,
+        "isMouseZoom": true
       }
     },
     "locations": {
