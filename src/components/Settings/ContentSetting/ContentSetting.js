@@ -1,11 +1,17 @@
-import { PanelBody, RangeControl, TextControl, ToggleControl, SelectControl } from '@wordpress/components';
+import { PanelBody, RangeControl, TextControl, ToggleControl, Button, SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import React, { useState } from 'react';
 import Autosuggest from 'react-autosuggest';
+import { MediaUpload } from "@wordpress/block-editor";
+import { produce } from 'immer';
 
 const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
-  const { zoomUnit, isMouseZoom, content, headingTag } = attributes;
+  const { zoomUnit, isMouseZoom, marker, layer, tracker, mapOptions } = attributes;
 
+  const { width, height, text, showIcon } = marker;
+  const { position } = layer;
+  const { tEnable, tPosition, tTitle } = tracker;
+  const { isShowDownload, isPdf, routePlan } = mapOptions;
 
   const [searchQuerySetting, setSearchQuerySetting] = useState(attributes.settingsSearchQuery || '');
   const [latSetting, setLatSetting] = useState(attributes.settingsLat || '');
@@ -62,10 +68,17 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
     suggestionHighlighted: 'autosuggest__suggestion--highlighted',
   };
 
+  const handleImageUrlChange = (newUrl) => {
+    const newIcon = produce(marker, draft => {
+      draft.url = newUrl;
+    });
+    setAttributes({ marker: newIcon });
+  };
+
 
   return (
     <>
-      <PanelBody title={__('Map Settings', 'osm-block')}>
+      <PanelBody title={__('Map Settings', 'osm-block')} initialOpen={false}>
         <div>
           <Autosuggest
             suggestions={suggestions}
@@ -79,61 +92,74 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
           />
         </div>
 
-        <div style={{marginTop: "20px"}}>
+        <div style={{ marginTop: "10px" }}>
           <TextControl
-            label={__('Type your heading', 'osm-block')}
-            value={content}
-            onChange={val => setAttributes({ content: val })}
-            placeholder={__("Type Your Heading..", "osm-block")}
-          />
-        </div>
-
-        <div>
-          <p style={{ color: "#050C9C", marginTop: "10px", fontWeight: "bold"}}>Select Your Heading Tag: </p>
-          <SelectControl
-            value={headingTag}
-            onChange={(newTag) => {
-              setAttributes({ headingTag: newTag });
+            label={__('Latitude', 'osm-block')}
+            value={latSetting}
+            onChange={(value) => {
+              setLatSetting(value);
+              setAttributes({ settingsLat: value });
+              setPosition(value, lngSetting);
             }}
-            options={[
-              { label: 'Paragraph', value: 'p' },
-              { label: 'Heading 1', value: 'h1' },
-              { label: 'Heading 2', value: 'h2' },
-              { label: 'Heading 3', value: 'h3' },
-              { label: 'Heading 4', value: 'h4' },
-              { label: 'Heading 5', value: 'h5' },
-              { label: 'Heading 6', value: 'h6' },
-            ]}
+          />
+          <TextControl
+            style={{ marginTop: "-10px" }}
+            label={__('Longitude', 'osm-block')}
+            value={lngSetting}
+            onChange={(value) => {
+              setLngSetting(value);
+              setAttributes({ settingsLng: value });
+              setPosition(latSetting, value);
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
+          <label>Route Planning:</label>
+          <ToggleControl
+            checked={routePlan}
+            onChange={val => {
+              const routePlan = produce(mapOptions, draft => {
+                draft.routePlan = val;
+              })
+              setAttributes({ mapOptions: routePlan });
+            }}
           />
         </div>
 
 
-        <TextControl
-          label={__('Latitude', 'osm-block')}
-          value={latSetting}
-          onChange={(value) => {
-            setLatSetting(value);
-            setAttributes({ settingsLat: value });
-            setPosition(value, lngSetting);
-          }}
-        />
-        <TextControl
-          label={__('Longitude', 'osm-block')}
-          value={lngSetting}
-          onChange={(value) => {
-            setLngSetting(value);
-            setAttributes({ settingsLng: value });
-            setPosition(latSetting, value);
-          }}
-        />
-
-        <div style={{ marginBottom: "20px" }}>
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
+          <label>Download Image:</label>
           <ToggleControl
-            label="Mouse Inter Zoom"
+            checked={isShowDownload}
+            onChange={val => {
+              const showDownload = produce(mapOptions, draft => {
+                draft.isShowDownload = val;
+              })
+              setAttributes({ mapOptions: showDownload });
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
+          <label>Download PDF:</label>
+          <ToggleControl
+            checked={isPdf}
+            onChange={val => {
+              const showDownload = produce(mapOptions, draft => {
+                draft.isPdf = val;
+              })
+              setAttributes({ mapOptions: showDownload });
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "10px", marginBottom: "10px" }}>
+          <label>Mouse Zoom:</label>
+          <ToggleControl
             checked={isMouseZoom}
-            onChange={val => setAttributes({ isMouseZoom: val })}
-          >
-          </ToggleControl>
+            onChange={(val) => setAttributes({ isMouseZoom: val })}
+          />
         </div>
 
         <RangeControl
@@ -143,6 +169,165 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
           min={13}
           max={80}
         />
+      </PanelBody>
+
+      <PanelBody title={__("Marker Setting", "osm-block")} initialOpen={false}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "-18px",
+          }}
+        >
+          {/* image url control */}
+          <TextControl
+            label={__("Marker Image URL", "n-slider")}
+            value={marker.url}
+            onChange={newIcon => handleImageUrlChange(newIcon)}
+            placeholder={__("Insert Your Icon URL", "osm-block")}
+          ></TextControl>
+          {/* image upload button */}
+          <MediaUpload
+            onSelect={(newMedia) => handleImageUrlChange(newMedia.url)}
+            render={({ open }) => (
+              <Button
+                onClick={open}
+                style={{
+                  background: "#4527a4",
+                  color: "white",
+                  height: "33px",
+                  marginBottom: "8px",
+                }}
+                icon={"upload f317"}
+              ></Button>
+            )}
+          ></MediaUpload>
+        </div>
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "10px", marginBottom: "10px" }}>
+          <label style={{ color: "#050C9C", fontWeight: "bold" }}>Show Marker:</label>
+          <ToggleControl
+            checked={showIcon}
+            onChange={val => {
+              const icon = produce(marker, draft => {
+                draft.showIcon = val;
+              })
+              setAttributes({ marker: icon })
+            }}
+          />
+        </div>
+
+        <div>
+          <TextControl
+            label={__('Type Your Marker Text', 'osm-block')}
+            value={text}
+            onChange={(value) => {
+              const newText = produce(marker, draft => {
+                draft.text = value;
+              })
+              setAttributes({ marker: newText })
+            }}
+          />
+
+          <RangeControl
+            label={__("Icon Size width", "osm-block")}
+            value={width}
+            onChange={val => {
+              const newWidth = produce(marker, draft => {
+                draft.width = val;
+              })
+              setAttributes({ marker: newWidth })
+            }}
+            min={25}
+            max={60}
+            shiftStep={1}
+          />
+
+          <RangeControl
+            label={__("Icon Size height", "osm-block")}
+            value={height}
+            onChange={val => {
+              const newHeight = produce(marker, draft => {
+                draft.height = val;
+              })
+              setAttributes({ marker: newHeight })
+            }}
+            min={31}
+            max={80}
+            shiftStep={1}
+          />
+        </div>
+      </PanelBody>
+
+      <PanelBody title={__("Current Tracker Setting", "osm-block")} initialOpen={false}>
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "10px", marginBottom: "10px" }}>
+          <label style={{ color: "#050C9C", fontWeight: "bold" }}>Tracker Enabled:</label>
+          <ToggleControl
+            checked={tEnable}
+            onChange={(val) => {
+              const newTracker = produce(tracker, draft => {
+                draft.tEnable = val;
+              })
+              setAttributes({ tracker: newTracker })
+            }}
+          />
+        </div>
+
+        <div>
+          <TextControl
+            label={__('Type Tracker Title', 'osm-block')}
+            value={tTitle}
+            onChange={(value) => {
+              const newText = produce(tracker, draft => {
+                draft.tTitle = value;
+              })
+              setAttributes({ tracker: newText })
+            }}
+          />
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <p>Tracker Position:</p>
+          <SelectControl
+            style={{ width: "145px" }}
+            value={tPosition}
+            options={[
+              { label: "Top Left", value: "topleft" },
+              { label: "Top Right", value: "topright" },
+              { label: "Bottom Left", value: "bottomleft" },
+              { label: "Bottom Right", value: "bottomright" },
+            ]}
+            onChange={(val) => {
+              const newTrackerPosition = produce(tracker, draft => {
+                draft.tPosition = val;
+              })
+              setAttributes({ tracker: newTrackerPosition })
+            }}
+          />
+        </div>
+      </PanelBody>
+
+      <PanelBody title={__("Layer Control Setting", "osm-block")} initialOpen={false}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <p>Tracker Position:</p>
+          <SelectControl
+            style={{ width: "145px" }}
+            value={position}
+            options={[
+              { label: "Top Left", value: "topleft" },
+              { label: "Top Right", value: "topright" },
+              { label: "Bottom Left", value: "bottomleft" },
+              { label: "Bottom Right", value: "bottomright" },
+            ]}
+            onChange={(val) => {
+              const newLayerPosition = produce(layer, draft => {
+                draft.position = val;
+              })
+              setAttributes({ layer: newLayerPosition })
+            }}
+          />
+        </div>
       </PanelBody>
     </>
   );

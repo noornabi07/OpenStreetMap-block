@@ -19,10 +19,6 @@
       "type": "string",
       "default": "Open Street Map"
     },
-    "headingTag": {
-      "type": "string",
-      "default": "h2"
-    },
     "typography": {
       "type": "object",
       "default": {
@@ -41,11 +37,11 @@
     },
     "settingsLat": {
       "type": "string",
-      "default": "51.505"
+      "default": "25.6260712"
     },
     "settingsLng": {
       "type": "string",
-      "default": "-0.09"
+      "default": "88.6346228"
     },
     "isMouseZoom": {
       "type": "boolean",
@@ -53,7 +49,7 @@
     },
     "zoomUnit": {
       "type": "number",
-      "default": 13
+      "default": 15
     },
     "columnWidth": {
       "type": "object",
@@ -83,10 +79,68 @@
       "type": "object",
       "default": {
         "padding": 20,
-        "background": "#2FB0A7",
         "titleColor": "#fff"
       }
+    },
+    "marker": {
+      "type": "object",
+      "default": {
+        "url": "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+        "width": 25,
+        "height": 31,
+        "text": "Current Location",
+        "color": "#fff",
+        "typo": { "fontSize": 15 },
+        "closeBtnColor": "#fff",
+        "background": "#000",
+        "showIcon": true,
+        "mWidth": "160px",
+        "mHeight": "45px"
+      }
+    },
+
+    "layer": {
+      "type": "object",
+      "default": {
+        "enable": true,
+        "typeLayer": "openStreetMap",
+        "position": "topright"
+      }
+    },
+
+    "tracker": {
+      "type": "object",
+      "default": {
+        "tEnable": true,
+        "tPosition": "topleft",
+        "tTitle": "Show Me Where I am"
+      }
+    },
+    "mapOptions": {
+      "type": "object",
+      "default": {
+        "isShowDownload": true,
+        "isPdf": true,
+        "routePlan": false
+      }
+    },
+    "locations": {
+      "type": "object",
+      "default": {
+        "fromLocation": {
+          "lat": 0,
+          "lon": 0,
+          "locationName": ""
+        },
+        "toLocation": {
+          "lat": 0,
+          "lon": 0,
+          "locationName": ""
+        }
+      }
     }
+
+
   },
   "supports": {
     "align": ["wide", "full"],

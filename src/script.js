@@ -2,10 +2,10 @@ import OsmFront from './components/OsmFront/OsmFront';
 import './style.scss';
 import { createRoot } from 'react-dom/client';
 // Block Name
-function FrontEnd({ attributes }) {
+function FrontEnd({ attributes, setAttributes }) {
 	return (
 		<>
-			<OsmFront attributes={attributes}></OsmFront>
+			<OsmFront attributes={attributes} setAttributes={setAttributes}></OsmFront>
 		</>
 	);
 }

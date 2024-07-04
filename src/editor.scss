@@ -43,16 +43,14 @@ $primaryColor: #4527a4;
   margin-left: -20px;
 }
 
-.searchIcon{
-	font-size: 20px;
-	color: #fff;
+.searchIcon {
+  font-size: 20px;
+  color: #fff;
 }
 
 .searchBtn:hover {
   color: yellow;
 }
-
-
 
 .autosuggest__container {
   position: relative;
@@ -92,14 +90,77 @@ $primaryColor: #4527a4;
 }
 
 .autosuggest__suggestion--highlighted {
-  background-color: #050C9C;
-	color: #fff;
+  background-color: #050c9c;
+  color: #fff;
 }
 
 .leaflet-control-layers {
-  background-color: #33B2AA;
+  background-color: #33b2aa;
   border-radius: 5px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.routeBtn {
+  background: rgb(5, 12, 156);
+  color: rgb(255, 255, 255);
+  font-size: 17px;
+  border-radius: 3px;
+  padding: 4px 8px;
+}
+
+.leaflet-openweathermap-icon {
+  z-index: 1000;
+  opacity: 1 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  color: black;
+  font-size: 15px;
+  text-align: center;
+}
+
+.leaflet-popup-tip-container {
+  display: none;
+}
+
+.weather-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+}
+
+.weather-icon img {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.weather-info {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.weather-info div {
+  margin: 2px 0;
+}
+
+.owm-icondiv {
+  display: flex;
+  align-items: center;
+}
+.owm-icondiv-temp {
+  font-size: 20px;
+  color: red;
+  font-weight: 600;
 }
 
 .prefixInspectorInfo {

@@ -1,22 +1,44 @@
 import React from 'react';
-import { getBorderCSS, getBackgroundCSS, getTypoCSS } from '../../../../Components/utils/getCSS'
+import { getBorderCSS, getTypoCSS } from '../../../../Components/utils/getCSS'
 
 const MainStyle = ({ attributes }) => {
-  const { cId, border, columnWidth, columnHeight, wrapperBorder, wrapperStyle, typography } = attributes;
-  const { padding, background, titleColor } = wrapperStyle;
+  const { cId, border, columnWidth, columnHeight, wrapperBorder, wrapperStyle, typography, marker, tracker } = attributes;
+  const { padding, titleColor } = wrapperStyle;
+  const { color, typo, closeBtnColor, background, mWidth, mHeight } = marker;
+  const { tBackground } = tracker;
 
   const mainWrapper = `#wrapper-${cId}`;
   const mapContent = `${mainWrapper} .mapContent`;
   const mainMap = `${mainWrapper} .mainMap`;
-  const title = `${mapContent} .title`
+  const title = `${mapContent} .title`;
+
+
+  const markerBackground = `${mainWrapper} .mainMap .leaflet-pane.leaflet-map-pane .leaflet-pane.leaflet-popup-pane .leaflet-popup.popupStyle.leaflet-zoom-animated .leaflet-popup-content-wrapper`;
+  const markerCloseButton = `${mainWrapper} .mainMap .leaflet-pane.leaflet-map-pane .leaflet-pane.leaflet-popup-pane .leaflet-popup.popupStyle.leaflet-zoom-animated .leaflet-popup-close-button`
+  const markerTitle = `${mainWrapper} .mainMap .leaflet-pane.leaflet-map-pane .leaflet-pane.leaflet-popup-pane .leaflet-popup.popupStyle.leaflet-zoom-animated .leaflet-popup-content-wrapper .leaflet-popup-content`;
+
 
   return (
     <style>
       {`
+      ${markerCloseButton}{
+        color: ${closeBtnColor};
+      }
+       ${markerBackground}{
+        background: ${background};
+        width: ${mWidth};
+        height: ${mHeight};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       }
+        ${markerTitle}{
+          color: ${color};
+        }
+        ${getTypoCSS(`${markerTitle}`, typo)?.styles}
         ${mainWrapper}{
           ${getBorderCSS(wrapperBorder)};
           padding: ${padding}px;
-          ${getBackgroundCSS(background)}
         }
         ${title}{
           color: ${titleColor};

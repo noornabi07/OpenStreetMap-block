@@ -1,14 +1,15 @@
-import { useEffect, Fragment } from 'react';
 import { InspectorControls } from '@wordpress/block-editor';
 import { TabPanel } from '@wordpress/components';
-import ContentSetting from './components/Settings/ContentSetting/ContentSetting';
+import { Fragment, useEffect} from 'react';
 import { useMap } from 'react-leaflet';
 import OsmBackend from './components/OsmBack/OsmBackend';
+import ContentSetting from './components/Settings/ContentSetting/ContentSetting';
 import Style from './components/Settings/StyleSetting/Style';
 const Edit = props => {
 	const { className, setAttributes, clientId, attributes } = props;
 
-	const { tab, isMouseZoom, zoomUnit } = attributes;
+	const { tab, isMouseZoom, zoomUnit, mapOptions } = attributes;
+	const { routePlan } = mapOptions;
 
 	useEffect(() => {
 		clientId && setAttributes({ cId: clientId.substring(0, 10) });
@@ -23,9 +24,9 @@ const Edit = props => {
 
 		useEffect(() => {
 			if (position) {
-				map.setView(position, 13);
+				map.setView(position, zoomUnit);
 			}
-		}, [position]);
+		}, [position, zoomUnit, routePlan]);
 
 		return null;
 	};
