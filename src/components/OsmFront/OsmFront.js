@@ -11,13 +11,11 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { LayersControl, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import MainStyle from '../MainStyle/MainStyle';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import { produce } from 'immer';
-
-const { BaseLayer } = LayersControl;
 
 const OsmFront = ({ attributes, setAttributes }) => {
   const [mapPosition, setMapPosition] = useState([attributes.settingsLat || 25.6260712, attributes.settingsLng || 88.6346228]);
@@ -29,9 +27,9 @@ const OsmFront = ({ attributes, setAttributes }) => {
   const printControlRef = useRef(null);
   const routingControlRef = useRef(null);
   const { text } = marker;
-  const { position } = layer;
+  const { position, enable } = layer;
   const { tPosition, tTitle, tEnable } = tracker;
-  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
+  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom, mapLayerType } = mapOptions;
 
   const createIcon = L.icon({
     iconUrl: url,
@@ -109,6 +107,8 @@ const OsmFront = ({ attributes, setAttributes }) => {
     return null;
   };
 
+
+  // set up current location for routing
   useEffect(() => {
     if (!fromLocation.lat || !fromLocation.lon) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -256,38 +256,74 @@ const OsmFront = ({ attributes, setAttributes }) => {
     return null;
   };
 
+  // Map Layer Type
+  const MapViewSwitch = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const mapViewSwitchDiv = L.control({ position: position });
+
+      mapViewSwitchDiv.onAdd = () => {
+        const div = L.DomUtil.create("div", "leaflet-bar mapViewSwitch");
+        div.innerHTML = `
+    <div class="layer-image" id="layerImage">
+      <div class="LayerHead">Layer</div>
+      <div class="layer-selector" id="layerSelector">
+        <select id="mapLayerSelector" title="Select Map Layer">
+          <option value="default" ${mapLayerType === "default" ? "selected" : ""}>OpenStreetMap</option>
+          <option value="satellite" ${mapLayerType === "satellite" ? "selected" : ""}>Satellite</option>
+          <option value="CartoDB" ${mapLayerType === "CartoDB" ? "selected" : ""}>CartoDB Positron</option>
+          <option value="CartoDark" ${mapLayerType === "CartoDark" ? "selected" : ""}>CartoDB Dark Matter</option>
+        </select>
+      </div>
+    </div>
+  `;
+
+        L.DomEvent.on(div.querySelector("#mapLayerSelector"), "change", (e) => {
+          const selectedLayerType = e.target.value;
+          setAttributes({
+            mapOptions: produce(mapOptions, (draft) => {
+              draft.mapLayerType = selectedLayerType;
+            }),
+          });
+        });
+
+        return div;
+      };
+      mapViewSwitchDiv.addTo(map);
+
+
+      return () => mapViewSwitchDiv.remove();
+    }, [map, setAttributes, mapLayerType, mapOptions]);
+
+    return null;
+  };
+
   return (
     <Fragment>
 
       <MainStyle attributes={attributes} />
 
       <MapContainer className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
-        <LayersControl position={position}>
-          <BaseLayer checked name="OpenStreetMap">
-            <TileLayer
-              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-          </BaseLayer>
-          <BaseLayer name="Satellite">
-            <TileLayer
-              url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
-              attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors'
-            />
-          </BaseLayer>
-          <BaseLayer name="CartoDB Positron">
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-          </BaseLayer>
-          <BaseLayer name="CartoDB Dark Matter">
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-            />
-          </BaseLayer>
-        </LayersControl>
+        {mapLayerType === "default" && <TileLayer
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {mapLayerType === "satellite" && <TileLayer
+          url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {mapLayerType === "CartoDB" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
+        {mapLayerType === "CartoDark" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
+
+        {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
+
         {tEnable && <GeolocationControl />}
         <OSMMap position={mapPosition} />
         {fullScreen && <FullscreenControl />}

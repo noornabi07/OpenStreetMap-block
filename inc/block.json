@@ -84,7 +84,7 @@
       "default": {
         "enable": true,
         "typeLayer": "openStreetMap",
-        "position": "topright"
+        "position": "topleft"
       }
     },
 
@@ -104,7 +104,8 @@
         "routePlan": false,
         "fullScreen": false,
         "zoomUnit": 15,
-        "isMouseZoom": true
+        "isMouseZoom": true,
+        "mapLayerType": "default"
       }
     },
     "locations": {

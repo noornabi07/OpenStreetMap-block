@@ -9,7 +9,7 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
   const { marker, layer, tracker, mapOptions } = attributes;
 
   const { width, height, text, showIcon } = marker;
-  const { position } = layer;
+  const { position, enable } = layer;
   const { tEnable, tPosition, tTitle } = tracker;
   const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
 
@@ -332,6 +332,22 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
       </PanelBody>
 
       <PanelBody title={__("Layer Control Setting", "osm-block")} initialOpen={false}>
+
+
+        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
+          <label>Layer Type:</label>
+          <ToggleControl
+            checked={enable}
+            onChange={val => {
+              const isLayer = produce(layer, draft => {
+                draft.enable = val;
+              })
+              setAttributes({ layer: isLayer });
+            }}
+          />
+        </div>
+
+
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <p>Tracker Position:</p>
           <SelectControl
@@ -339,9 +355,7 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
             value={position}
             options={[
               { label: "Top Left", value: "topleft" },
-              { label: "Top Right", value: "topright" },
               { label: "Bottom Left", value: "bottomleft" },
-              { label: "Bottom Right", value: "bottomright" },
             ]}
             onChange={(val) => {
               const newLayerPosition = produce(layer, draft => {
