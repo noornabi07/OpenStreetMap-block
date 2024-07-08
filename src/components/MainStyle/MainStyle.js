@@ -2,15 +2,13 @@ import React from 'react';
 import { getBorderCSS, getTypoCSS } from '../../../../Components/utils/getCSS'
 
 const MainStyle = ({ attributes }) => {
-  const { cId, columnWidth, columnHeight, wrapperStyles, typography, marker, mapStyles } = attributes;
+  const { cId, columnWidth, columnHeight, wrapperStyles, marker, mapStyles } = attributes;
   const { color, typo, closeBtnColor, background, mWidth, mHeight } = marker;
   const { padding, wrapperBorder } = wrapperStyles;
   const { mapBorder } = mapStyles;
 
   const mainWrapper = `#wrapper-${cId}`;
-  const mapContent = `${mainWrapper} .mapContent`;
   const mainMap = `${mainWrapper} .mainMap`;
-  const title = `${mapContent} .title`;
 
 
   const markerBackground = `${mainWrapper} .mainMap .leaflet-pane.leaflet-map-pane .leaflet-pane.leaflet-popup-pane .leaflet-popup.popupStyle.leaflet-zoom-animated .leaflet-popup-content-wrapper`;
@@ -40,7 +38,6 @@ const MainStyle = ({ attributes }) => {
           color: ${color};
         }
         ${getTypoCSS(`${markerTitle}`, typo)?.styles}
-        ${getTypoCSS(`${title}`, typography)?.styles}
         ${mainMap}{
           ${getBorderCSS(mapBorder)};
           width: ${columnWidth.width.desktop};

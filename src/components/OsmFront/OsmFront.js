@@ -2,7 +2,6 @@ import L from 'leaflet';
 import 'leaflet-control-geocoder';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-import 'leaflet-easyprint';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet.locatecontrol';
@@ -13,23 +12,22 @@ import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import MainStyle from '../MainStyle/MainStyle';
-import domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { produce } from 'immer';
 
 const OsmFront = ({ attributes, setAttributes }) => {
   const [mapPosition, setMapPosition] = useState([attributes.settingsLat || 25.6260712, attributes.settingsLng || 88.6346228]);
 
-  const { cId, marker, showIcon, layer, tracker, locations, mapOptions } = attributes;
+  const { marker, showIcon, layer, tracker, locations, mapOptions } = attributes;
   const { fromLocation, toLocation } = locations;
   const { url } = marker;
   const mapInstance = useRef(null);
-  const printControlRef = useRef(null);
   const routingControlRef = useRef(null);
   const { text } = marker;
   const { position, enable } = layer;
   const { tPosition, tTitle, tEnable } = tracker;
-  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom, mapLayerType } = mapOptions;
+  const { isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom, mapLayerType } = mapOptions;
 
   const createIcon = L.icon({
     iconUrl: url,
@@ -80,33 +78,6 @@ const OsmFront = ({ attributes, setAttributes }) => {
     }, [map, locations]);
     return null;
   };
-
-  const PrintControl = () => {
-    const map = useMap();
-
-    useEffect(() => {
-      if (!printControlRef.current) {
-        printControlRef.current = L.easyPrint({
-          title: 'Export Map',
-          position: 'topright',
-          sizeModes: ['Current', 'A4Portrait', 'A4Landscape'],
-          filename: 'map_export',
-          exportOnly: true,
-          hideControlContainer: true
-        }).addTo(map);
-      }
-
-      return () => {
-        if (printControlRef.current) {
-          printControlRef.current.remove();
-          printControlRef.current = null;
-        }
-      };
-    }, [map]);
-
-    return null;
-  };
-
 
   // set up current location for routing
   useEffect(() => {
@@ -195,21 +166,20 @@ const OsmFront = ({ attributes, setAttributes }) => {
   };
 
   const exportAsPdf = () => {
-    const mapElement = document.getElementById(`wrapper-${cId}`);
+    const mapElement = document.getElementById('pdfId');
 
-    domtoimage.toPng(mapElement)
-      .then((dataUrl) => {
-        const pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'px',
-          format: [mapElement.offsetWidth, mapElement.offsetHeight]
-        });
-        pdf.addImage(dataUrl, 'PNG', 0, 0, mapElement.offsetWidth, mapElement.offsetHeight);
-        pdf.save('map.pdf');
-      })
-      .catch((error) => {
-        console.error('Failed to export map as PDF:', error);
+    html2canvas(mapElement, { useCORS: true }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
       });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('map.pdf');
+    }).catch(error => {
+      console.error('Failed to export map as PDF:', error);
+    });
   };
 
   const FullscreenControl = () => {
@@ -304,38 +274,38 @@ const OsmFront = ({ attributes, setAttributes }) => {
 
       <MainStyle attributes={attributes} />
 
-      <MapContainer className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
-        {mapLayerType === "default" && <TileLayer
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-        />}
-        {mapLayerType === "satellite" && <TileLayer
-          url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
-          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-        />}
-        {mapLayerType === "CartoDB" && <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-        />}
-        {mapLayerType === "CartoDark" && <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-        />}
+     
+        <MapContainer id='pdfId' className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
+          {mapLayerType === "default" && <TileLayer
+            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+          />}
+          {mapLayerType === "satellite" && <TileLayer
+            url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+          />}
+          {mapLayerType === "CartoDB" && <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+          />}
+          {mapLayerType === "CartoDark" && <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+          />}
 
-        {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
+          {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
 
-        {tEnable && <GeolocationControl />}
-        <OSMMap position={mapPosition} />
-        {fullScreen && <FullscreenControl />}
-        {isShowDownload && <PrintControl />}
-        {routePlan && <RoutingControl />}
-        {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
-          <Popup className='popupStyle'>
-            {text}
-          </Popup>
-          <Tooltip>Your Find Location</Tooltip>
-        </Marker>}
-      </MapContainer>
+          {tEnable && <GeolocationControl />}
+          <OSMMap position={mapPosition} />
+          {fullScreen && <FullscreenControl />}
+          {routePlan && <RoutingControl />}
+          {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
+            <Popup className='popupStyle'>
+              {text}
+            </Popup>
+            <Tooltip>Your Find Location</Tooltip>
+          </Marker>}
+        </MapContainer>
       {isPdf && <button onClick={exportAsPdf}>
         Export as PDF
       </button>}

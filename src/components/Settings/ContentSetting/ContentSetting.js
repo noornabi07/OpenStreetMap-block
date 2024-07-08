@@ -11,7 +11,7 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
   const { width, height, text, showIcon } = marker;
   const { position, enable } = layer;
   const { tEnable, tPosition, tTitle } = tracker;
-  const { isShowDownload, isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
+  const { isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom } = mapOptions;
 
   const [searchQuerySetting, setSearchQuerySetting] = useState(attributes.settingsSearchQuery || '');
   const [latSetting, setLatSetting] = useState(attributes.settingsLat || '');
@@ -123,20 +123,6 @@ const ContentSetting = ({ attributes, setAttributes, setPosition }) => {
                 draft.routePlan = val;
               })
               setAttributes({ mapOptions: routePlan });
-            }}
-          />
-        </div>
-
-
-        <div style={{ display: "flex", justifyItems: "center", gap: "10px", marginTop: "20px", marginBottom: "10px" }}>
-          <label>Download Image:</label>
-          <ToggleControl
-            checked={isShowDownload}
-            onChange={val => {
-              const showDownload = produce(mapOptions, draft => {
-                draft.isShowDownload = val;
-              })
-              setAttributes({ mapOptions: showDownload });
             }}
           />
         </div>
