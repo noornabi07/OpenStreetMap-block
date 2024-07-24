@@ -29,6 +29,10 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
   const { isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom, mapLayerType } = mapOptions;
 
 
+  console.log("fromLocation Result:", fromLocation);
+  console.log("fromLocation Result:", toLocation);
+
+
   const [mapPosition, setMapPosition] = useState([attributes.settingsLat || 25.6260712, attributes.settingsLng || 88.6346228]);
 
   const createIcon = L.icon({
@@ -89,6 +93,7 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
           .then(response => response.json())
           .then(data => {
             if (data && data.display_name) {
+              console.log("data........", data)
               setAttributes({
                 locations: produce(locations, draft => {
                   draft.fromLocation.lat = position.coords.latitude;
@@ -118,7 +123,8 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
       if (fromLocation && toLocation) {
         const fromLatLng = L.latLng(fromLocation.lat, fromLocation.lon);
         const toLatLng = L.latLng(toLocation.lat, toLocation.lon);
-        console.log("to location result:", toLocation);
+        console.log("to fromLatLng result:", fromLatLng);
+        console.log("to toLatLng result:", toLatLng);
 
         routingControlRef.current = L.Routing.control({
           waypoints: [fromLatLng, toLatLng],
@@ -170,8 +176,74 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
     return null;
   };
 
+  // const RoutingControl = () => {
+  //   // const { fromLocation, toLocation } = attributes;
+  //   // const routingControlRef = useRef(null);
+  //   const map = useMap();
+
+  //   useEffect(() => {
+  //     const fromLatLng = L.latLng(fromLocation.lat, fromLocation.lon);
+  //     const toLatLng = L.latLng(toLocation.lat, toLocation.lon);
+
+  //     if (routingControlRef.current) {
+  //       map.removeControl(routingControlRef.current);
+  //       routingControlRef.current = null;
+  //     }
+
+  //     routingControlRef.current = L.Routing.control({
+  //       waypoints: [fromLatLng, toLatLng],
+  //       routeWhileDragging: true,
+  //       geocoder: L.Control.Geocoder.nominatim(),
+  //       createMarker: (i, waypoint, n) => {
+  //         let markerOptions = {};
+  //         if (i === 0) {
+  //           markerOptions.icon = L.icon({
+  //             iconUrl: 'https://www.openstreetmap.org/assets/marker-green.png',
+  //             iconSize: [25, 41],
+  //             iconAnchor: [12, 41],
+  //             popupAnchor: [1, -34],
+  //             shadowSize: [41, 41]
+  //           });
+  //         } else if (i === n - 1) {
+  //           markerOptions.icon = L.icon({
+  //             iconUrl: 'https://www.openstreetmap.org/assets/marker-red.png',
+  //             iconSize: [25, 41],
+  //             iconAnchor: [12, 41],
+  //             popupAnchor: [1, -34],
+  //             shadowSize: [41, 41]
+  //           });
+  //         } else {
+  //           markerOptions.icon = L.icon({
+  //             iconUrl: 'path/to/intermediate-icon.png',
+  //             iconSize: [25, 41],
+  //             iconAnchor: [12, 41],
+  //             popupAnchor: [1, -34],
+  //             shadowSize: [41, 41]
+  //           });
+  //         }
+  //         return L.marker(waypoint.latLng, markerOptions);
+  //       },
+  //       // Example using OpenRouteService (replace YOUR_ORS_API_KEY)
+  //       router: L.Routing.osrmv1({
+  //         serviceUrl: 'https://cors-anywhere.herokuapp.com/https://api.openrouteservice.org',
+  //         apiKey: 'e5c988d7e7adcc07fea90fa5291ed7a7',
+  //       }),
+  //     }).addTo(map);
+
+  //     return () => {
+  //       if (routingControlRef.current) {
+  //         map.removeControl(routingControlRef.current);
+  //         routingControlRef.current = null;
+  //       }
+  //     };
+  //   }, [map, fromLocation, toLocation]);
+
+  //   return null;
+  // };
+
 
   // Download PDF Function
+
   const exportAsPdf = () => {
     const mapElement = document.getElementById('pdfId');
 
@@ -270,37 +342,37 @@ const OsmBackend = ({ attributes, OSMMap, setAttributes }) => {
     <Fragment>
       <MainStyle attributes={attributes}></MainStyle>
 
-        <MapContainer id='pdfId' className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
-          {mapLayerType === "default" && <TileLayer
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-          />}
-          {mapLayerType === "satellite" && <TileLayer
-            url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-          />}
-          {mapLayerType === "CartoDB" && <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-          />}
-          {mapLayerType === "CartoDark" && <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-          />}
+      <MapContainer id='pdfId' className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
+        {mapLayerType === "default" && <TileLayer
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {mapLayerType === "satellite" && <TileLayer
+          url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {mapLayerType === "CartoDB" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
+        {mapLayerType === "CartoDark" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
 
-          {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
+        {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
 
-          {tEnable && <GeolocationControl />}
-          <OSMMap position={mapPosition} />
-          {fullScreen && <FullscreenControl />}/
-          {routePlan && <RoutingControl />}
-          {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
-            <Popup className='popupStyle'>
-              {text}
-            </Popup>
-            <Tooltip>Your Find Location</Tooltip>
-          </Marker>}
-        </MapContainer>
+        {tEnable && <GeolocationControl />}
+        <OSMMap position={mapPosition} />
+        {fullScreen && <FullscreenControl />}/
+        {routePlan && <RoutingControl />}
+        {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
+          <Popup className='popupStyle'>
+            {text}
+          </Popup>
+          <Tooltip>Your Find Location</Tooltip>
+        </Marker>}
+      </MapContainer>
       {isPdf && <button onClick={exportAsPdf}>Export as PDF</button>}
     </Fragment>
   );

@@ -29,6 +29,11 @@ const OsmFront = ({ attributes, setAttributes }) => {
   const { tPosition, tTitle, tEnable } = tracker;
   const { isPdf, routePlan, fullScreen, zoomUnit, isMouseZoom, mapLayerType } = mapOptions;
 
+  const [layerType, setLayerType] = useState(mapLayerType);
+  console.log(layerType);
+
+
+
   const createIcon = L.icon({
     iconUrl: url,
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
@@ -237,13 +242,13 @@ const OsmFront = ({ attributes, setAttributes }) => {
         const div = L.DomUtil.create("div", "leaflet-bar mapViewSwitch");
         div.innerHTML = `
     <div class="layer-image" id="layerImage">
-      <div class="LayerHead">Layer</div>
+    <div class="LayerHead">Layer</div>
       <div class="layer-selector" id="layerSelector">
         <select id="mapLayerSelector" title="Select Map Layer">
-          <option value="default" ${mapLayerType === "default" ? "selected" : ""}>OpenStreetMap</option>
-          <option value="satellite" ${mapLayerType === "satellite" ? "selected" : ""}>Satellite</option>
-          <option value="CartoDB" ${mapLayerType === "CartoDB" ? "selected" : ""}>CartoDB Positron</option>
-          <option value="CartoDark" ${mapLayerType === "CartoDark" ? "selected" : ""}>CartoDB Dark Matter</option>
+          <option value="default" ${layerType === "default" ? "selected" : ""}>OpenStreetMap</option>
+          <option value="satellite" ${layerType === "satellite" ? "selected" : ""}>Satellite</option>
+          <option value="CartoDB" ${layerType === "CartoDB" ? "selected" : ""}>CartoDB Positron</option>
+          <option value="CartoDark" ${layerType === "CartoDark" ? "selected" : ""}>CartoDB Dark Matter</option>
         </select>
       </div>
     </div>
@@ -251,11 +256,8 @@ const OsmFront = ({ attributes, setAttributes }) => {
 
         L.DomEvent.on(div.querySelector("#mapLayerSelector"), "change", (e) => {
           const selectedLayerType = e.target.value;
-          setAttributes({
-            mapOptions: produce(mapOptions, (draft) => {
-              draft.mapLayerType = selectedLayerType;
-            }),
-          });
+          setLayerType(selectedLayerType);
+         
         });
 
         return div;
@@ -274,38 +276,38 @@ const OsmFront = ({ attributes, setAttributes }) => {
 
       <MainStyle attributes={attributes} />
 
-     
-        <MapContainer id='pdfId' className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
-          {mapLayerType === "default" && <TileLayer
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-          />}
-          {mapLayerType === "satellite" && <TileLayer
-            url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
-          />}
-          {mapLayerType === "CartoDB" && <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-          />}
-          {mapLayerType === "CartoDark" && <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
-          />}
 
-          {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
+      <MapContainer id='pdfId' className='mainMap' center={mapPosition} zoom={zoomUnit} scrollWheelZoom={isMouseZoom}>
+        {layerType === "default" && <TileLayer
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {layerType === "satellite" && <TileLayer
+          url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a> contributors'
+        />}
+        {layerType === "CartoDB" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
+        {layerType === "CartoDark" && <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://bplugins.com/">bPlugins</a>'
+        />}
 
-          {tEnable && <GeolocationControl />}
-          <OSMMap position={mapPosition} />
-          {fullScreen && <FullscreenControl />}
-          {routePlan && <RoutingControl />}
-          {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
-            <Popup className='popupStyle'>
-              {text}
-            </Popup>
-            <Tooltip>Your Find Location</Tooltip>
-          </Marker>}
-        </MapContainer>
+        {enable && <MapViewSwitch mapLayerType={mapLayerType} />}
+
+        {tEnable && <GeolocationControl />}
+        <OSMMap position={mapPosition} />
+        {fullScreen && <FullscreenControl />}
+        {routePlan && <RoutingControl />}
+        {marker?.showIcon && <Marker icon={createIcon} position={mapPosition} draggable={true}>
+          <Popup className='popupStyle'>
+            {text}
+          </Popup>
+          <Tooltip>Your Find Location</Tooltip>
+        </Marker>}
+      </MapContainer>
       {isPdf && <button onClick={exportAsPdf}>
         Export as PDF
       </button>}

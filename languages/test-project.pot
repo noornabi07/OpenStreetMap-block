@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-07-08T04:21:03+00:00\n"
+"POT-Creation-Date: 2024-07-08T07:06:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: osm-block\n"
@@ -35,112 +35,112 @@ msgid "http://bplugins.com"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51640
+#: dist/editor.js:51712
 msgid "Map Settings"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51656
+#: dist/editor.js:51728
 msgid "Latitude"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51666
+#: dist/editor.js:51738
 msgid "Longitude"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51742
+#: dist/editor.js:51814
 msgid "Marker Setting"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51755
+#: dist/editor.js:51827
 msgid "Insert Your Icon URL"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51790
+#: dist/editor.js:51862
 msgid "Type Your Marker Text"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51801
+#: dist/editor.js:51873
 msgid "Icon Size width"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51815
+#: dist/editor.js:51887
 msgid "Icon Size height"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51830
+#: dist/editor.js:51902
 msgid "Current Tracker Setting"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51847
+#: dist/editor.js:51919
 msgid "Type Tracker Title"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:51879
+#: dist/editor.js:51951
 msgid "Layer Control Setting"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61021
+#: dist/editor.js:61093
 msgid "General Style"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61024
+#: dist/editor.js:61096
 msgid "Open Street Width:"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61033
+#: dist/editor.js:61105
 msgid "Open Street Height:"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61039
+#: dist/editor.js:61111
 msgid "Map Border:"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61047
+#: dist/editor.js:61119
 msgid "Wrapper Styles"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61050
+#: dist/editor.js:61122
 msgid "Wrapper Border:"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61072
+#: dist/editor.js:61144
 msgid "Marker Styles"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61073
+#: dist/editor.js:61145
 msgid "Marker Text Color"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61080
+#: dist/editor.js:61152
 msgid "Marker Close Button Color"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61087
+#: dist/editor.js:61159
 msgid "Marker Background Color"
 msgstr ""
 
 #: dist/editor.js:367
-#: dist/editor.js:61094
+#: dist/editor.js:61166
 msgid "Marker Typo"
 msgstr ""
 

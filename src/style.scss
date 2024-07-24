@@ -2,17 +2,17 @@ $primaryColor: #4527a4;
 
 // Common CSS
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 // Dashicon
 .dashicons {
-	font-family: dashicons !important;
+  font-family: dashicons !important;
 }
 
 // LayourControl style here
 .leaflet-control-layers {
-  background-color: #33B2AA;
+  background-color: #33b2aa;
   border-radius: 5px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
 }
@@ -30,23 +30,22 @@ html {
   margin-right: 8px;
 }
 
-.leaflet-routing-collapse-btn{
-	color: black;
+.leaflet-routing-collapse-btn {
+  color: black;
 }
-
 
 .layer-image {
   position: relative;
-  display: inline-block;
+  // display: inline-block;
 }
 
 .layer-image .LayerHead {
   background-color: white;
-	color: #000;
-	border: 1px solid #000;
-	padding: 5px 5px;
+  color: #000;
+  border: 1px solid #000;
+  padding: 5px 5px;
   cursor: pointer;
-	border-radius: 3px;
+  border-radius: 3px;
 }
 
 .layer-selector {
@@ -64,22 +63,77 @@ html {
   z-index: 1000; /* Make sure it's on top */
 }
 
+.leaflet-top .leaflet-right {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.leaflet-routing-collapse-btn {
+  position: absolute;
+  top: 0;
+  right: 6px;
+  font-size: 24px;
+  color: #ccc;
+  font-weight: bold;
+}
+
+// Leaflet Control Container Style start
+.leaflet-top.leaftlet-left {
+  display: flex;
+  flex-direction: column;
+}
+.leaflet-top.leaftlet-left > div {
+  width: fit-content;
+}
+.leaflet-top.leaftlet-left .leaflet-routing-container {
+  flex: 1;
+}
+.leaflet-routing-container-hide .leaflet-routing-collapse-btn {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3C!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM288 176c0-44.2-35.8-80-80-80s-80 35.8-80 80c0 48.8 46.5 111.6 68.6 138.6c6 7.3 16.8 7.3 22.7 0c22.1-27 68.6-89.8 68.6-138.6zm-112 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/%3E%3C/svg%3E") !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  margin-top: -5px;
+  margin-left: -2px;
+  cursor: pointer;
+}
+
+// Leaflet Control Container Style end
+
 // Block Name
 .wp-block-osm-osm-block {
-	* {
-		box-sizing: border-box;
-	}
+  * {
+    box-sizing: border-box;
+  }
 
-	.prefixBlockName {
-		display: inline-block;
-	}
+  .leaflet-top .leaflet-right {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+  }
 
-	.icon {
-		font-style: inherit;
-	}
+  .leaflet-routing-collapse-btn {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    font-size: 24px;
+    color: #ccc;
+    font-weight: bold;
+  }
 
-	img {
-		width: 100%;
-		max-width: 100%;
-	}
+  .prefixBlockName {
+    display: inline-block;
+  }
+
+  .icon {
+    font-style: inherit;
+  }
+
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
 }

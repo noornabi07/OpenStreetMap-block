@@ -2,8 +2,9 @@
 class OSMHelloBlock{
 	public function __construct(){
 		add_action( 'init', [$this, 'onInit'] );
-		// add_action('enqueue_block_assets', 'openstreetmap_block_assets');
 	}
+
+
 	function onInit() {
 		wp_register_style( 'osm-hello-style', OSM_DIR_URL . 'dist/style.css', [ ], OSM_VERSION ); // Style
 		wp_register_style( 'osm-hello-editor-style', OSM_DIR_URL . 'dist/editor.css', [ 'osm-hello-style' ], OSM_VERSION ); // Backend Style
